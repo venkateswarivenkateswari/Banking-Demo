@@ -39,7 +39,16 @@ pipeline {
         sh 'docker push cbabu85/banking:1.0'
                                 }
             }
-    
+    stage('Create Infrastructure using terraform') {
+      steps {
+          dir('scripts') {
+            sh 'sudo chmod 600 learnawskey.pem'
+            sh 'terraform init'
+            sh 'terraform validate'
+            sh 'terraform apply --auto approve'
+                      }
+            }
+        }
 
     }
 }
