@@ -3,10 +3,7 @@ pipeline {
     tools{
       maven 'M2_HOME'
           }
-  environment {
-    AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
-  }
+ 
    stages {
     stage('Git checkout') {
       steps {
@@ -45,12 +42,14 @@ pipeline {
             }
     stage('Create Infrastructure using terraform') {
       steps {
-          dir('scripts') {
+            dir('scripts') {
             sh 'sudo chmod 600 learnawskey.pem'
+            withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'jenkinsIAMuser', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
             sh 'terraform init'
             sh 'terraform validate'
             sh 'terraform apply --auto approve'
                       }
+                 }
             }
         }
 
