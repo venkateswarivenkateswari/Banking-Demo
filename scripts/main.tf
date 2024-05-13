@@ -1,12 +1,12 @@
 resource "aws_instance" "test-server" {
   ami           = "ami-07caf09b362be10b8" 
   instance_type = "t2.micro" 
-  key_name = "learnawskey"
-  vpc_security_group_ids= ["sg-06e7a45a6786ad282"]
+  key_name = "jenkinskey"
+  vpc_security_group_ids= ["sg-02ea7c8681f58b6ff"]
   connection {
     type     = "ssh"
     user     = "ec2-user"
-    private_key = file("./learnawskey.pem")
+    private_key = file("./jenkinskey.pem")
     host     = self.public_ip
   }
   provisioner "remote-exec" {
